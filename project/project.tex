@@ -1,0 +1,143 @@
+\documentclass[]{article}
+
+\usepackage{amsmath}
+
+%opening
+\title{Image Mosaicking \\ Study Week Fascinating Informatics}
+\author{Adrian W\"alchli \\ Computer Vision Group \\ University of Bern}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\section{Introduction}
+	\subsection{Welcome to the Institute of Computer Science}
+		The Institute of Computer Science, Prof.\@ Paolo Favaro and I welcome all participants of the study week ``Fascinating Informatics''.
+		As every year, we prepare a unique student project that promotes computer science with a glimpse into the research at the University of Bern.
+		Our institute consists of five research groups: Computer Vision Group (CVG), Communications and Distributed Systems (CDS), Logic and Theory Group (LTG), Software Composition Group (SCG) and Computer Graphics Group (CGG).
+		I am a first-year PhD student from the Computer Vision Group supervised by Prof.\@ Paolo Favaro. 
+		I will be the tutor for your group project and it is my job to guide you and answer any questions you have or help with problems.
+		I am very much looking forward getting to know you and work with you.
+		It is the first time I design a project like this for the study week, so I am curious to hear your feedback!
+		
+	
+	\subsection{Image Mosaicking}
+		\begin{figure}
+			\caption{Example of a image mosaic.}
+			\label{fig:mosaicking-example}
+		\end{figure}
+		In this project, you will develop an algorithm that intelligently selects and arranges small image patches to form a mosaic of a given target image.
+		An example of this is shown in figure~\ref{fig:mosaicking-example}. 
+		The target image in this example is the lion, and the image patches are a random collection of images from the internet down-scaled to a smaller resolution.
+		In terms of content, these small patches have nothing in common with the target image.
+		In order to create a mosaic of an image, one has to define a similarity measure to be able to compare an arbitrary image patch with a region in the target image. 
+		Although humans are very good at judging images by their content and appearance, you can imagine that it would still take a lot of time for a human to manually assemble a mosaic like the one shown in figure~\ref{fig:mosaicking-example}.
+		In this project, you will learn how a computer can ``learn'' to compare image patches and automatically create a mosaic for any image within seconds.
+	
+	\subsection{Prerequisites}
+		You will use Python as a programming language. 
+		It is of course beneficial to have little experience with Python, or any other language, but it is not a requirement.
+		Since Python is very beginner friendly, you will be able to pick it up very fast. 
+		And you will like it!
+		And in any case, your tutor will help you to get prepared for the programming.
+		
+		We will provide at least one computer for you to work with, but it is good to have your personal notebook with you for researching, taking notes etc.
+	
+	\subsection{Learning Outcome}
+		After successful completion of this one-week project, you will  %acquired the following knowledge and skills.
+		\begin{itemize}
+			\item have a basic understanding of Machine Learning and Computer Vision,
+			\item know how to implement and/or apply algorithms in Machine Learning and Computer Vision,
+			\item have acquired skills for scientific Python programming,
+			\item know how to write a scientific report and create a poster summarizing your research and results,
+			\item get a better picture of what academic research looks like,
+		\end{itemize}
+		and hopefully be proud of your work!
+	
+
+\section{Preparation}
+	\subsection{Working with the Terminal}
+	
+	\subsection{Python}
+	
+	\subsection{Tips and Tricks}
+	
+	
+\section{Theory}
+
+	\subsection{Understanding the Computer Vision Problem}
+		In the context of computer science, an image is simply an array of numbers where each number represents the intensity of light shown in one pixel.
+		Such an image is usually taken with a digital camera that -- for a short period of time -- exposes its sensor to the light passing through the aperture.
+		Depending on the camera, a small amount of low-level processing (brightness adjustments, sharpening, white balance, etc.\@) is applied to the pixel values read from the sensor.
+		However, this type of processing does not require any knowledge of the contents in the image.
+		What if we want to do more? 
+		Here are some examples of Computer Vision problems that are too complex to solve just by ``looking'' at the raw pixel data:
+		\begin{itemize}
+			\item Detecting a face in an image 
+			\item Solving a jigsaw puzzle
+			\item Generating a caption for an image
+			\item Removing the background in an image (semantic segmentation)
+			\item Identifying and classifying a tumor in an x-ray image
+		\end{itemize}
+		There are many more examples of problems like these that are not that hard for a human to solve, but humans are slow and cannot do it reliably sometimes.
+		
+	\subsection{Image Mosaicking}
+		The problem of Image Mosaicking can be described as follows.
+		We are given a large dataset of small image patches (say $32 \times 32$ pixels) and an arbitrary user-supplied target image (say $1024 \times 1024$ pixels).
+		The Mosaicking algorithm must select patches from the dataset and arrange them in a grid to form an output image of the same size as the target image, depicting the same object or scene.
+		Figure~\ref{fig:mosaicking-working-and-not-working} shows an example of a failing algorithm that randomly chooses image patches, and a working algorithm that produces the desired result.
+		\begin{figure}
+			\caption{
+				Left: Target image. 
+				Middle: Algorithm selects patches randomly. 
+				Right: Algorithm uses similarity measure to find good patches.
+			}
+			\label{fig:mosaicking-working-and-not-working}
+		\end{figure}
+		Hence, we can see that Image Mosaicking requires a somewhat abstract understanding of the image patches in order to find patches that are visually similar to the target image's patches.
+		In the next section, you will learn how exactly we define similarity and why it is hard measure the ``distance'' between two images.
+		
+	\subsection{Metrics}
+		You are probably familiar with the Euclidean distance (even if you have never heard of Euclid) and know how to measure distances on a 2D map or even in 3D space. 
+		The concept of a distance or \emph{metric} (as mathematicians call it) extends to other, high-dimensional spaces.
+		In general, a metric $d$ is defined by these four properties:
+		\begin{align}
+			d(x, y) &\geq 0 \\
+			d(x, y) &= 0 \iff x = y \\
+			d(x, y) &= d(y, x) \\
+			d(x, z) &\leq (x, y) + d(y, z) 
+		\end{align}
+		These properties need hold for all $x, y, z$.
+		Don't be afraid of these formulas, they are very intuitive!
+		The first inequality says that a distance is non-negative. 
+		This certainly makes sense.
+		The second equation simply means that the distance between two objects can only be zero if and only if the two objects are one and the same.
+		This also makes sense (for example think of distances between cities in Switzerland).
+		The third property says that a distance should be symmetric, that is, the distance measured from Bern to Z\"urich is the same as measured from Z\"urich to Bern.
+		Finally, the third property is called the \emph{triangle inequality}. 
+		It simply means that the distance is longer or equal if you take a detour, e.g.\@ 
+		$d(\text{Bern, Z\"urich}) \leq d(\text{Bern, Basel}) + d(\text{Basel, Z\"urich})$.
+		
+		Can we define a metric on images? 
+		Say we have one, then we would be able to quantitatively measure the difference between two images $A$ and $B$. 
+		If $d(A, B)$ is a small number, we would say $A$ and $B$ are similar, and if the distance is large, we say they are not similar.
+		But how does one compute such a number for \emph{any} pair of images (or patches in our project)?
+		Is it even possible to do that?
+		Let's look at a simple, maybe naive approach specifically for Mosaicking.
+		
+	\subsection{A Naive Algorithm}
+		
+	
+
+\section{Assignments}
+
+
+\section{Project Report}
+
+\section{Acknowledgments}
+
+
+
+\end{document}
