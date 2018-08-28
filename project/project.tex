@@ -1,6 +1,8 @@
 \documentclass[]{article}
 
 \usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 %opening
 \title{Image Mosaicking \\ Study Week Fascinating Informatics}
@@ -83,6 +85,8 @@
 		\end{itemize}
 		There are many more examples of problems like these that are not that hard for a human to solve, but humans are slow and cannot do it reliably sometimes.
 		
+	\subsection{Datasets}
+		
 	\subsection{Image Mosaicking}
 		The problem of Image Mosaicking can be described as follows.
 		We are given a large dataset of small image patches (say $32 \times 32$ pixels) and an arbitrary user-supplied target image (say $1024 \times 1024$ pixels).
@@ -125,14 +129,48 @@
 		If $d(A, B)$ is a small number, we would say $A$ and $B$ are similar, and if the distance is large, we say they are not similar.
 		But how does one compute such a number for \emph{any} pair of images (or patches in our project)?
 		Is it even possible to do that?
-		Let's look at a simple, maybe naive approach specifically for Mosaicking.
 		
-	\subsection{A Naive Algorithm}
+	\subsection{A Simple Mosaicking Algorithm}
+		As an example, let's look at a naive way of comparing two patches: we compute the average color of each patch and look at the difference.
+		\begin{equation}
+			d(x, y) = \bar{x} - \bar{y} = \frac{1}{N} \sum_{i=1}^{N} x_i - y_i
+		\end{equation}
+		Here, $\bar{x}$ and $\bar{y}$ denote the average/mean of patch $x$ and $y$ respectively, and $N$ is the number of pixels in each patch.
+		Note that this is \emph{not} a metric. 
+		Can you figure out which of the four properties of a metric are violated?
 		
-	
+		Having this function $d(x, y)$ defined, we can now formulate a simple algorithm to search through the dataset and find a good patch for every patch in the target image (see algorithm~\ref{alg:nearest-neighbor}). 
+		\begin{algorithm}[bt]
+			\begin{algorithmic} 
+				\FOR{$x$ in image}
+					\STATE smallest $\leftarrow \infty$
+					\STATE nearest $\leftarrow \emptyset$
+					\FOR{$y$ in dataset}	
+						\IF{$d(x, y) < $ smallest}
+						\STATE smallest $\leftarrow d(x, y)$
+						\STATE nearest $\leftarrow y$
+						\ENDIF
+					\ENDFOR
+					\STATE replace $x$ in image with nearest
+				\ENDFOR
+			\end{algorithmic}
+			\caption{Nearest Neighbor Search}
+			\label{alg:nearest-neighbor}
+		\end{algorithm}
+		This algorithm is called a \emph{nearest neighbor} search. 
+		It finds the patch in the dataset that is closest to the target patch (according to the distance $d(x,y)$).
+		
+		As explained later in the assignments, you will use nearest neighbor search and implement the average distance for your first Mosaicking algorithm.
 
 \section{Assignments}
 
+	\subsection{Average Color Distance}
+	
+	\subsection{Nearest Neighbor Search}
+	
+	\subsection{Clustering}
+	
+	\subsection{Advanced: Features from a Neural Network}
 
 \section{Project Report}
 
