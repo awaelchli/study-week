@@ -3,6 +3,7 @@
 \usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{hyperref}
 
 %opening
 \title{Image Mosaicking \\ Study Week Fascinating Informatics}
@@ -130,10 +131,10 @@
 		But how does one compute such a number for \emph{any} pair of images (or patches in our project)?
 		Is it even possible to do that?
 		
-	\subsection{A Simple Mosaicking Algorithm}
+	\subsection{A Simple Mosaicking Algorithm}\label{sec:simple-mosaicking}
 		As an example, let's look at a naive way of comparing two patches: we compute the average color of each patch and look at the difference.
-		\begin{equation}
-			d(x, y) = \bar{x} - \bar{y} = \frac{1}{N} \sum_{i=1}^{N} x_i - y_i
+		\begin{equation}\label{eq:mean-color-distance}
+			d(x, y) = \lVert \bar{x} - \bar{y} \rVert = \left\lVert \frac{1}{N} \sum_{i=1}^{N} x_i - y_i  \right\rVert
 		\end{equation}
 		Here, $\bar{x}$ and $\bar{y}$ denote the average/mean of patch $x$ and $y$ respectively, and $N$ is the number of pixels in each patch.
 		Note that this is \emph{not} a metric. 
@@ -161,6 +162,26 @@
 		It finds the patch in the dataset that is closest to the target patch (according to the distance $d(x,y)$).
 		
 		As explained later in the assignments, you will use nearest neighbor search and implement the average distance for your first Mosaicking algorithm in Assignment 1.
+		
+	\subsection{Clustering}
+		Clustering in Machine Learning is used to understand structure in data. 
+		It can be easily explained with a real-life example: A supermarket.
+		Let's say you want to go to Migros and buy pasta, but the brand or type of pasta does not matter.
+		Will you go through every shelf and look at every product individually to check if it is pasta? 
+		No. 
+		You probably know that there is one shelf that has all the pasta, and only pasta.
+		In data science, this is called a cluster.
+		A cluster is a part of the space (a shelf) that contains a certain type of data (a product category).
+		Note the following important remarks about clustering.
+		\begin{itemize}
+			\item Every data point belongs to a cluster, and to one cluster only.
+			\item Clustering only make sense if there is structure in the data (what would an ``unstructured'' supermarket look like?)
+			\item Often it is unknown how many clusters there are in the data.
+		\end{itemize}
+		How could we use clustering in this project?
+		
+		
+%		You can imagine having clusters of products in a supermarket is a good thing, because otherwise products would be mixed and scattered all over the place.
 
 \section{Assignments}
 
@@ -176,15 +197,56 @@
 			\item Ideally, the student with the weakest programming skills should be the one coding the most, and the more experienced students should offer help and advice or do other work. 
 			But feel free to discuss other options. 
 			The most important thing is that everyone can contribute to the team in a meaningful way.
-			
 		\end{itemize}
 
-	\subsection{Assignment 1: Average Color Distance}
+	\subsection{Assignment 1a: Average Color Distance}
+		\paragraph{Utility functions} 
+		We will use a fixed square size of $32 \times 32$ for the patches.
+		Therefore, the height and width will not necessarily be divisible by 32.
+		Implement the two functions \verb|number_of_patches| and \\ 
+		\verb|output_image_size| in the file \verb|utils.py|.
+		These helper functions are used to define the grid dimensions and to truncate the image to a size that fits the grid.
+		
+		\paragraph{Average feature}
+		Implement the method \verb|feature| in \verb|assignment1.py|. 
+		Hint: Have a look at 
+		\href{https://docs.scipy.org/doc/numpy/reference/generated/numpy.mean.html}{\texttt{numpy.mean}} how to compute the average of a vector.
+		Note that we are dealing with colored patches (red, green, and blue component). 
+		This means that your average will be a vector of size 3, not be a scalar number.
+		Ask your tutor for advice on this.
+		
+		\paragraph{Distance}
+		Finally, implement the method \verb|distance| in \verb|assignment1.py|.
+		Here you should call the \verb|feature| method to compute the features first, and then compute the difference between those features as presented in equation~\ref{eq:mean-color-distance}.
+		Your method should return a single scalar number, the distance.
+		
+		\paragraph{Testing}
+		Run the code in \verb|assignment1_test.py| to see if your computed features and distances make sense.
+		
+	\subsection{Assignment 1b: Nearest Neighbor Search}
+		What you have so far is a way of measuring the distance between patches.
+		To find the closest match between the target patch and patches in the dataset, we will use the nearest neighbor search as discussed in section~\ref{sec:simple-mosaicking}. 
+		Instead of coding it yourself, you should use an existing implementation such as the one from the Python 
+		\href{http://scikit-learn.org/stable/modules/neighbors.html}{\texttt{scikit-learn}} package.
+		In the \verb|get_model| method from \verb|assignment1.py| you should construct the NearestNeighbor object with two parameters:
+		\begin{itemize}
+			\item \verb|n_neighbor|: This is the number of closest neighbors you want to retrieve. 
+			\item \verb|metric|: This is a pointer to the function that computes the distance. 
+			Set it to the method you implemented.
+		\end{itemize}
 	
-	\subsection{Assignment 2: Nearest Neighbor Search}
+		\paragraph{Testing}
+		You can test your nearest neighbor search by running \\
+		\verb|assignment1_test.py|. 
+		It will show you a few examples of nearest neighbors for a given patch.
+		If it looks good, run the main program in \verb|assignment1.py| with your own images.
+		You will notice that the program takes a long time to finish. 
+		\textbf{What do you think causes the long computation time?}
+		Measure the time it takes to process a single patch (directly in the code, or with a stopwatch).
 	
-	\subsection{Assignment 3: Clustering}
-	
+	\subsection{Assignment 2: Clustering}
+		
+		
 	\subsection{Advanced: Features from a Neural Network}
 
 \section{Project Report}
