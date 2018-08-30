@@ -178,7 +178,19 @@
 			\item Clustering only make sense if there is structure in the data (what would an ``unstructured'' supermarket look like?)
 			\item Often it is unknown how many clusters there are in the data.
 		\end{itemize}
-		How could we use clustering in this project?
+		How could we use clustering for Image Mosaicking?
+		The space of all images (or image patches in our case) has structure in it, and we could reason that there must be clusters for specific types of images. For example, it is reasonable to assume that it is possible to draw a boundary between daylight- and nighttime images (yielding two clusters), but it is not trivial to describe this boundary exactly.
+		Another challenge is that we don't know exactly how many clusters there are or how many we \emph{need}.
+		
+		In the second assignment, you will get to use the \textbf{Kmeans} clustering algorithm. 
+		This algorithm can find clusters in our large collection of image patches.
+		It returns the following two quantities.
+		\begin{itemize}
+			\item A list of \emph{cluster centers}. 
+			The center is an image that represents the average for the images in that cluster.
+			\item A \emph{label} for each image that tells us to which cluster it belongs (a number from $1$ to $N$).
+		\end{itemize}
+		
 		
 		
 %		You can imagine having clusters of products in a supermarket is a good thing, because otherwise products would be mixed and scattered all over the place.
@@ -245,7 +257,8 @@
 		Measure the time it takes to process a single patch (directly in the code, or with a stopwatch).
 	
 	\subsection{Assignment 2: Clustering}
-		
+		Implement the method \verb|get_model| in the \verb|assignment2.py| file.
+		Similar to 
 		
 	\subsection{Advanced: Features from a Neural Network}
 
