@@ -186,8 +186,8 @@
 		This algorithm can find clusters in our large collection of image patches.
 		It returns the following two quantities.
 		\begin{itemize}
-			\item A list of \emph{cluster centers}. 
-			The center is an image that represents the average for the images in that cluster.
+			\item A list of $N$ \emph{cluster centers}. 
+			A center is an image that represents the average for the images in that cluster.
 			\item A \emph{label} for each image that tells us to which cluster it belongs (a number from $1$ to $N$).
 		\end{itemize}
 		
@@ -258,14 +258,44 @@
 	
 	\subsection{Assignment 2: Clustering}
 		Implement the method \verb|get_model| in the \verb|assignment2.py| file.
-		Similar to 
+		This should return the initialized \verb|Kmeans| model (like \verb|NearestNeighbor| from the previous assign).
+		You should provide the following arguments to Kmeans.
+		\begin{itemize}
+			\item \verb|n_clusters|: The number of clusters in the data. 
+			You have to find a value that works best for your data. 
+			Try a low number first, and then increase it.
+			\item \verb|n_init|: This is the number of times the clustering is repeated with different initial cluster centers.
+			\item \verb|max_iter|: The number of Kmeans iterations to be performed. 
+			With each iteration, the estimated cluster centers move closer and closer to the true centers in the data.
+			\item \verb|n_jobs|: The number of CPU cores that should be used for calculations. 
+			This depends on your hardware. 
+			Ask your tutor what value you should choose.
+			\item \verb|verbose|: You should set this to \verb|True| so that you see the progress in the terminal.
+		\end{itemize}
+		You can find more details about the arguments for Kmeans at the link below.~\footnote{
+			\url{http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html}
+		}
+		Note that the clustering takes a few minutes to finish, but this needs to be done only once (for given settings).
+		After it finishes, the cluster centers are saved and can be loaded every time you run the Mosaicking code in the future.
+		If you would like to use the saved model, set the variable \verb|train| to \verb|False|.
+		
+		Once you find good settings for the clustering, test it on your own images and compare the results with nearest neighbor search.
+		Also compare the runtime when using the saved model on new images.
 		
 	\subsection{Advanced: Features from a Neural Network}
 
 \section{Project Report}
 
-\section{Acknowledgments}
+	\begin{enumerate}
+		\item Introduction
+		\item 
+	\end{enumerate}
 
+\section{Acknowledgments}
+	In the name of the Institute of Computer Science and the Computer Vision Group Prof.\@ Paolo Favaro and I would like thank the foundation \emph{Schweizer Jugend forscht} for the opportunity to work with such talented young students. 
+	Many thanks to the organizer Dario Moser who provided us with all necessary material, instructions and guidelines for the study week.
+	Last but not least we also thank our system administrator who prepared the student computers and provided us with the necessary infrastructure.
+	
 
 
 \end{document}
