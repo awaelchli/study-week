@@ -1,9 +1,12 @@
-\documentclass[]{article}
+\documentclass[a4paper]{article}
 
 \usepackage{amsmath}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage[left=3cm, right=3cm, bottom=3cm, top=3cm]{geometry} 
+\graphicspath{ {./images/} }
 
 %opening
 \title{Image Mosaicking \\ Study Week Fascinating Informatics}
@@ -13,6 +16,7 @@
 
 \maketitle
 \tableofcontents
+\newpage
 
 
 \section{Introduction}
@@ -28,7 +32,10 @@
 	
 	\subsection{Image Mosaicking}
 		\begin{figure}
-			\caption{Example of a image mosaic.}
+			\centering
+			\includegraphics[width=0.7\linewidth]{eye-mosaic}
+			\caption{Example mosaic using house numbers.}
+			\label{fig:eye-mosaic}
 			\label{fig:mosaicking-example}
 		\end{figure}
 		In this project, you will develop an algorithm that intelligently selects and arranges small image patches to form a mosaic of a given target image.
@@ -164,6 +171,15 @@
 		As explained later in the assignments, you will use nearest neighbor search and implement the average distance for your first Mosaicking algorithm in Assignment 1.
 		
 	\subsection{Clustering}
+		\begin{figure}[tb]
+			\centering
+			\includegraphics[width=0.45\linewidth]{clustering-wiki-grey}
+			\hfill
+			\includegraphics[width=0.45\linewidth]{clustering-wiki}
+			\caption{Example three clusters}
+			\label{fig:clustering-wiki}
+		\end{figure}
+		
 		Clustering in Machine Learning is used to understand structure in data. 
 		It can be easily explained with a real-life example: A supermarket.
 		Let's say you want to go to Migros and buy pasta, but the brand or type of pasta does not matter.
@@ -213,8 +229,8 @@
 
 	\subsection{Assignment 1a: Average Color Distance}
 		\paragraph{Utility functions} 
-		We will use a fixed square size of $32 \times 32$ for the patches.
-		Therefore, the height and width will not necessarily be divisible by 32.
+		We will use a fixed square size of $32 \times 32$ pixels for the patches.
+		Therefore, the height and width of the target image will not necessarily be divisible by 32.
 		Implement the two functions \verb|number_of_patches| and \\ 
 		\verb|output_image_size| in the file \verb|utils.py|.
 		These helper functions are used to define the grid dimensions and to truncate the image to a size that fits the grid.
@@ -283,6 +299,35 @@
 		Also compare the runtime when using the saved model on new images.
 		
 	\subsection{Advanced: Features from a Neural Network}
+		In this exercise you will train a neural network and apply it on the dataset to get features. 
+		You will use these features in clustering instead of the raw pixel information as before.
+		Neural networks are tricky! It is possible that your outputs will not look better than in the previous assignments.
+		Your task is to
+		\begin{itemize}
+			\item train the network and compute the features for every patch in the dataset,
+			\item use Kmeans clustering on the newly computed features,
+			\item compare your outputs with the mosaics created in the previous assignments,
+			\item conclude which of the three methods work best.
+		\end{itemize}
+		This exercise will require less coding and more theoretical understanding.
+		Your tutor will give you an overview and tips before you start with this assignment.
+	
+	\subsection{Optional: Try a different dataset}
+		
+		
+	
+	\subsection{Optional: Blending}
+		In case your output images do not look as desired or if you want to have some more control over the end result, you can consider this blending technique.
+		The idea is that you take the mosaic and superimpose the original image.
+		Let $M$ be the mosaic you created and $I$ be the target image.
+		You choose value $\alpha$ between zero and one and apply the formula
+		\begin{equation}
+			B = \alpha M + (1 - \alpha) I.
+		\end{equation}
+		This will create a new image $B$ which is a blend of $I$ and $M$.
+		Example: $B = 0.7 \cdot M + 0.3 \cdot I$.
+		If you choose $\alpha = 1$, then $B = M$, and you get back the mosaic as if you did not apply blending.
+		On the other hand, $\alpha = 0$ means discard the mosaic and keep the target image, so $B = I$.
 
 \section{Project Report}
 
@@ -294,7 +339,7 @@
 \section{Acknowledgments}
 	In the name of the Institute of Computer Science and the Computer Vision Group Prof.\@ Paolo Favaro and I would like thank the foundation \emph{Schweizer Jugend forscht} for the opportunity to work with such talented young students. 
 	Many thanks to the organizer Dario Moser who provided us with all necessary material, instructions and guidelines for the study week.
-	Last but not least we also thank our system administrator who prepared the student computers and provided us with the necessary infrastructure.
+	Last but not least we also thank our system administrator Dr.\@ Peppo Brambilla who prepared the student computers and provided us with the necessary infrastructure.
 	
 
 
