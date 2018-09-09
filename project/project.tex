@@ -44,7 +44,7 @@
 		In terms of content, these small patches have nothing in common with the target image.
 		In order to create a mosaic of an image, one has to define a similarity measure to be able to compare an arbitrary image patch with a region in the target image. 
 		Although humans are very good at judging images by their content and appearance, you can imagine that it would still take a lot of time for a human to manually assemble a mosaic like the one shown in figure~\ref{fig:mosaicking-example}.
-		In this project, you will learn how a computer can ``learn'' to compare image patches and automatically create a mosaic for any image within seconds.
+		In this project, you will learn how a computer can ``learn'' to compare image patches and automatically create a mosaic for any image.
 	
 	\subsection{Prerequisites}
 		You will use Python as a programming language. 
@@ -53,7 +53,7 @@
 		And you will like it!
 		And in any case, your tutor will help you to get prepared for the programming.
 		
-		We will provide at least one computer for you to work with, but it is good to have your personal notebook with you for researching, taking notes etc.
+		We will provide a computer for each student, but it is good to have your personal notebook with you for researching, taking notes etc.
 	
 	\subsection{Learning Outcome}
 		After successful completion of this one-week project, you will  %acquired the following knowledge and skills.
@@ -68,12 +68,16 @@
 	
 
 \section{Preparation}
-	\subsection{Working with the Terminal}
-	
-	\subsection{Python}
-	
-	\subsection{Tips and Tricks}
-	
+	Before starting with the project, you should read this document completely to get an overview of what the contents are and what we expect from you.
+	We provide three Linux computers with all necessary tools installed and accessible in the desktop menu. 
+	\\ \\
+	\textbf{Username:} studi\\
+	\textbf{Password:} rubberband
+	\\ \\
+	The code you have to work with is already set up.
+	It is located inside the \emph{Documents} folder in your home directory. 
+	Try to understand the file- and folder structure, then quickly go through all assignment files and study the comments (lines that start with \#).
+
 	
 \section{Theory}
 
@@ -93,20 +97,22 @@
 		\end{itemize}
 		There are many more examples of problems like these that are not that hard for a human to solve, but humans are slow and cannot do it reliably sometimes.
 		
-	\subsection{Datasets}
-		
 	\subsection{Image Mosaicking}
 		The problem of Image Mosaicking can be described as follows.
 		We are given a large dataset of small image patches (say $32 \times 32$ pixels) and an arbitrary user-supplied target image (say $1024 \times 1024$ pixels).
 		The Mosaicking algorithm must select patches from the dataset and arrange them in a grid to form an output image of the same size as the target image, depicting the same object or scene.
 		Figure~\ref{fig:mosaicking-working-and-not-working} shows an example of a failing algorithm that randomly chooses image patches, and a working algorithm that produces the desired result.
 		\begin{figure}
+			\centering
+			\includegraphics[width=0.45\linewidth]{dog1}
+%			\hfill
+			\includegraphics[width=0.45\linewidth]{mosaic-dog1-nearest}
 			\caption{
 				Left: Target image. 
-				Middle: Algorithm selects patches randomly. 
-				Right: Algorithm uses similarity measure to find good patches.
+				Right: Output of mosaicking algorithm. 
+				Magnify to see patches.
 			}
-			\label{fig:mosaicking-working-and-not-working}
+			\label{fig:mosaic-dog1-nearest}
 		\end{figure}
 		Hence, we can see that Image Mosaicking requires a somewhat abstract understanding of the image patches in order to find patches that are visually similar to the target image's patches.
 		In the next section, you will learn how exactly we define similarity and why it is hard measure the ``distance'' between two images.
@@ -171,15 +177,6 @@
 		As explained later in the assignments, you will use nearest neighbor search and implement the average distance for your first Mosaicking algorithm in Assignment 1.
 		
 	\subsection{Clustering}
-		\begin{figure}[tb]
-			\centering
-			\includegraphics[width=0.45\linewidth]{clustering-wiki-grey}
-			\hfill
-			\includegraphics[width=0.45\linewidth]{clustering-wiki}
-			\caption{Example three clusters}
-			\label{fig:clustering-wiki}
-		\end{figure}
-		
 		Clustering in Machine Learning is used to understand structure in data. 
 		It can be easily explained with a real-life example: A supermarket.
 		Let's say you want to go to Migros and buy pasta, but the brand or type of pasta does not matter.
@@ -206,9 +203,22 @@
 			A center is an image that represents the average for the images in that cluster.
 			\item A \emph{label} for each image that tells us to which cluster it belongs (a number from $1$ to $N$).
 		\end{itemize}
-		
-		
-		
+		\begin{figure}[tb]
+			\centering
+			\includegraphics[width=0.8\linewidth]{clustering-example}
+			\caption{
+				Clustering example. 
+				Left: The data before clustering. No annotations are given.
+				Right: Cluster assignments after running Kmeans.
+				Source: \href{https://towardsdatascience.com/k-means-data-clustering-bce3335d2203}{towardsdatascience.com}
+			}
+			\label{fig:clustering-example}
+		\end{figure}
+		In figure~\ref{fig:clustering-example} you can see an example where Kmeans was used to find three clusters in the data.
+		The two axes are labeled $x_1$ and $x_2$, therefore this data lies in 2D.
+		From this figure we cannot tell what the data is or what the clusters represent. 
+		Can you think of two variables $x_1$ and $x_2$ that could be used for clustering?
+		For example, they could be attributes for an observation made in an experiment or survey.
 %		You can imagine having clusters of products in a supermarket is a good thing, because otherwise products would be mixed and scattered all over the place.
 
 \section{Assignments}
@@ -250,6 +260,7 @@
 		
 		\paragraph{Testing}
 		Run the code in \verb|assignment1_test.py| to see if your computed features and distances make sense.
+		You can use the generated figures in your report, poster or presentation.
 		
 	\subsection{Assignment 1b: Nearest Neighbor Search}
 		What you have so far is a way of measuring the distance between patches.
@@ -289,7 +300,7 @@
 			\item \verb|verbose|: You should set this to \verb|True| so that you see the progress in the terminal.
 		\end{itemize}
 		You can find more details about the arguments for Kmeans at the link below.~\footnote{
-			\url{http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html}
+			Documentation: \url{http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html}
 		}
 		Note that the clustering takes a few minutes to finish, but this needs to be done only once (for given settings).
 		After it finishes, the cluster centers are saved and can be loaded every time you run the Mosaicking code in the future.
@@ -298,7 +309,7 @@
 		Once you find good settings for the clustering, test it on your own images and compare the results with nearest neighbor search.
 		Also compare the runtime when using the saved model on new images.
 		
-	\subsection{Advanced: Features from a Neural Network}
+	\subsection{Optional/Advanced: Features from a Neural Network}
 		In this exercise you will train a neural network and apply it on the dataset to get features. 
 		You will use these features in clustering instead of the raw pixel information as before.
 		Neural networks are tricky! It is possible that your outputs will not look better than in the previous assignments.
@@ -313,9 +324,11 @@
 		Your tutor will give you an overview and tips before you start with this assignment.
 	
 	\subsection{Optional: Try a different dataset}
+		Your tutor can show you how to use a different dataset. 
+		It will require a bit of work to download and set this up.
+		All your models need to be re-trained for the new dataset, therefore this is optional and should only be considered if you progress very fast.
 		
 		
-	
 	\subsection{Optional: Blending}
 		In case your output images do not look as desired or if you want to have some more control over the end result, you can consider this blending technique.
 		The idea is that you take the mosaic and superimpose the original image.
@@ -329,12 +342,15 @@
 		If you choose $\alpha = 1$, then $B = M$, and you get back the mosaic as if you did not apply blending.
 		On the other hand, $\alpha = 0$ means discard the mosaic and keep the target image, so $B = I$.
 
-\section{Project Report}
+\section{Report, Poster and Presentation}
 
-	\begin{enumerate}
-		\item Introduction
-		\item 
-	\end{enumerate}
+	Make sure you collect all the outputs for later use in report and presentation.
+	Organize your results and give them meaningful filenames so that you remember which output corresponds to which settings you tested.
+	Use a USB drive or a cloud service like Dropbox to share everything with your group members.
+	You can find templates for report, poster and presentation in the download section on the SJF website.~\footnote{
+	Templates: \url{https://sjf.ch/stiftung/downloads/}}
+	Your tutor will communicate a review deadline for the poster and presentation and will give you feedback on those.
+	
 
 \section{Acknowledgments}
 	In the name of the Institute of Computer Science and the Computer Vision Group Prof.\@ Paolo Favaro and I would like thank the foundation \emph{Schweizer Jugend forscht} for the opportunity to work with such talented young students. 
